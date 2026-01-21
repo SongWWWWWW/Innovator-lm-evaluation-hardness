@@ -96,3 +96,5 @@ python ./tookit/extract_log.py \
     --output_excel "/mnt/innovator/data/wangcong/data/eval/general/results/general_task.xlsx"
 # test
 # 111 test gitdoc
+# test ai summary commit
+
