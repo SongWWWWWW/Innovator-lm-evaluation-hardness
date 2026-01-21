@@ -12,7 +12,7 @@ export TRANSFORMERS_OFFLINE=1
 export HF_ALLOW_CODE_EVAL="1"
 
 current_time=$(date "+%Y%m%d_%H%M%S")
-model_path="/mnt/innovator/data/wangcong/model/Qwen3-30B-A3B-Base"
+model_path="/mnt/innovator/code/wenzichen/LLaVA-OneVision-1.5/TEST/LLaVA-OneVision-1.5-RL/experiments/checkpoints/root/0109_SFT_Stage1_44M_Mixed_AII_Sci_Data_V2_iter_0157285_sft_780K_hf-STAGE2-RL-GSPO/0109-trial1/default/epoch1epochstep1126globalstep6499"
 model_name=$(basename $model_path)
 output_path="/mnt/innovator/data/wangcong/data/eval/general"
 mkdir -p $output_path
@@ -40,7 +40,7 @@ log_file="${output_path}/eval_${model_name}_${current_time}.log"
 tasks_config=(
     "aime24:0"
     "aime25:0"
-    "hendrycks_math:4"
+    # "hendrycks_math:4"
 )
 # --- 关键修改：解析数组并拼接成逗号分隔的字符串 ---
 task_names=()
@@ -68,13 +68,13 @@ echo "对应 Shots: $shots_arg" >> $log_file
 echo "==========================================================" >> $log_file
 
 start_total=$(date +%s.%N)
-
+# 
 # 执行单次评测命令
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
     --model vllm \
-    --model_args pretrained=$model_path,tensor_parallel_size=$tensor_parallel_size,dtype=auto,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size \
-    --gen_kwargs temperature=0.7,top_p=0.8,top_k=20,presence_penalty=1.5 \
+    --model_args pretrained=$model_path,dtype=auto,trust_remote_code=True \
+    --gen_kwargs temperature=0.7,tensor_parallel_size=$tensor_parallel_size,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size,top_p=0.8,top_k=20,presence_penalty=1.5 \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
     --batch_size auto \
@@ -94,3 +94,5 @@ echo "==========================================================" >> $log_file
 python ./tookit/extract_log.py \
     --input_log $log_file \
     --output_excel "/mnt/innovator/data/wangcong/data/eval/general/results/general_task.xlsx"
+# test
+# 111 test gitdoc
