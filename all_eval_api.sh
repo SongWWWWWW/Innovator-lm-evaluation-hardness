@@ -1,0 +1,102 @@
+#!/bin/bash
+source /mnt/innovator/miniconda3/etc/profile.d/conda.sh
+conda activate lm_evaluation
+cd /mnt/innovator/code/wangcong/Evaluation/lm-evaluation-harness
+
+# 环境变量设置
+export HF_ENDPOINT="https://hf-mirror.com"
+export HF_TOKEN=$HF_TOKEN
+export HF_DATASETS_CACHE="/mnt/innovator/data/wangcong/.cache"
+export HF_DATASETS_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+export HF_ALLOW_CODE_EVAL="1"
+
+current_time=$(date "+%Y%m%d_%H%M%S")
+model_path="/mnt/innovator/code/wenzichen/LLaVA-OneVision-1.5/TEST/LLaVA-OneVision-1.5-RL/experiments/checkpoints/root/0109_SFT_Stage1_44M_Mixed_AII_Sci_Data_V2_iter_0157285_sft_780K_hf-STAGE2-RL-GSPO/0109-trial1/default/epoch1epochstep1126globalstep6499"
+model_name=$(basename $model_path)
+output_path="/mnt/innovator/data/wangcong/data/eval/general"
+mkdir -p $output_path
+
+log_file="${output_path}/eval_${model_name}_${current_time}.log"
+
+# 配置任务及其对应的 shot 数
+# 格式保持不变，方便后面解析
+# tasks_config=(
+#     "mmlu:5"
+#     "cmmlu:5"
+#     "ceval-valid:5"
+#     "bbh:3"
+#     "gsm8k_cot:8"
+#     "humaneval:0"
+#     "leaderboard_gpqa_diamond:5"
+#     "winogrande:5"
+#     "triviaqa:5"
+#     "nq_open:3"
+#     "arc_challenge:25"
+#     "arc_easy:25"
+#     "hellaswag:10"
+#     "agieval:0"
+# )
+tasks_config=(
+    "aime24:0"
+    "aime25:0"
+    # "hendrycks_math:4"
+)
+# --- 关键修改：解析数组并拼接成逗号分隔的字符串 ---
+task_names=()
+shot_nums=()
+
+for item in "${tasks_config[@]}"; do
+    task_names+=("${item%%:*}")
+    shot_nums+=("${item##*:}")
+done
+
+# 使用逗号连接数组
+tasks_arg=$(IFS=,; echo "${task_names[*]}")
+shots_arg=$(IFS=,; echo "${shot_nums[*]}")
+# ----------------------------------------------
+
+tensor_parallel_size=8
+data_parallel_size=1
+
+# 初始化日志
+echo "==========================================================" >> $log_file
+echo "开始全量评测时间: $(date)" >> $log_file
+echo "模型路径: $model_path" >> $log_file
+echo "任务列表: $tasks_arg" >> $log_file
+echo "对应 Shots: $shots_arg" >> $log_file
+echo "==========================================================" >> $log_file
+
+model_name=""
+api_key=""
+
+start_total=$(date +%s.%N)
+# 
+# 执行单次评测命令
+# 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
+    --model openai \
+    --model_args model=gpt-4-turbo,api_key=$OPENAI_API_KEY \
+    # --gen_kwargs temperature=0.7,tensor_parallel_size=$tensor_parallel_size,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size,top_p=0.8,top_k=20,presence_penalty=1.5 \
+    --tasks "$tasks_arg" \
+    --num_fewshot "$shots_arg" \
+    --batch_size auto \
+    --output_path "${output_path}/${model_name}_${current_time}" \
+    --confirm_run_unsafe_code \
+    2>&1 | tee -a $log_file
+
+end_total=$(date +%s.%N)
+total_runtime=$(echo "$end_total - $start_total" | bc)
+
+echo -e "\n\n==========================================================" >> $log_file
+echo "全部评测结束!" >> $log_file
+echo "总耗时: $total_runtime 秒" >> $log_file
+echo "==========================================================" >> $log_file
+
+# 后处理提取数据
+python ./tookit/extract_log.py \
+    --input_log $log_file \
+    --output_excel "/mnt/innovator/data/wangcong/data/eval/general/results/general_task.xlsx"
+# test
+# 111 test gitdoc
+# test ai summary commit
