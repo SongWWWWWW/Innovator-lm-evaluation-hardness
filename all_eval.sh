@@ -97,4 +97,3 @@ python ./tookit/extract_log.py \
 # test
 # 111 test gitdoc
 # test ai summary commit
-
