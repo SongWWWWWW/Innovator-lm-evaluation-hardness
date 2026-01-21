@@ -76,7 +76,7 @@ start_total=$(date +%s.%N)
 # 执行单次评测命令
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
-    --model  vllm-vlm\
+    --model  vllm\
     --model_args model=$model_name,api_key=$api_key \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
@@ -97,6 +97,7 @@ echo "==========================================================" >> $log_file
 python ./tookit/extract_log.py \
     --input_log $log_file \
     --output_excel "/mnt/innovator/data/wangcong/data/eval/general/results/general_task.xlsx"
+
 # test
 # 111 test gitdoc
 # test ai summary commit
