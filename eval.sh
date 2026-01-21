@@ -38,4 +38,4 @@ echo "Total evaluation time: $runtime seconds"
 
 # test ai commit
 # test auto commit aaa
-# push
+# 
