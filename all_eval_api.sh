@@ -67,8 +67,9 @@ echo "任务列表: $tasks_arg" >> $log_file
 echo "对应 Shots: $shots_arg" >> $log_file
 echo "==========================================================" >> $log_file
 
+export OPENAI_BASE_URL="http://61.175.246.233:8002/v1"
 model_name=""
-api_key=""
+api_key="EMPTY"
 
 start_total=$(date +%s.%N)
 # 
