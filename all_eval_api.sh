@@ -76,9 +76,8 @@ start_total=$(date +%s.%N)
 # 执行单次评测命令
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
-    --model openai \
+    --model  vllm-vlm\
     --model_args model=$model_name,api_key=$api_key \
-    # --gen_kwargs temperature=0.7,tensor_parallel_size=$tensor_parallel_size,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size,top_p=0.8,top_k=20,presence_penalty=1.5 \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
     --batch_size auto \
