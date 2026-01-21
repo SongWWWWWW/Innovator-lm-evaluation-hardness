@@ -68,8 +68,8 @@ echo "对应 Shots: $shots_arg" >> $log_file
 echo "==========================================================" >> $log_file
 
 export OPENAI_BASE_URL="http://61.175.246.233:8002/v1"
-model_name=""
-api_key="EMPTY"
+export model_name="stage_2_instruct_Mixed_40M_1111_shuffled_v1_iter_0135000_hf"
+export api_key="EMPTY"
 
 start_total=$(date +%s.%N)
 # 
@@ -77,7 +77,7 @@ start_total=$(date +%s.%N)
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
     --model openai \
-    --model_args model=gpt-4-turbo,api_key=$OPENAI_API_KEY \
+    --model_args model=$model_name,api_key=$api_key \
     # --gen_kwargs temperature=0.7,tensor_parallel_size=$tensor_parallel_size,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size,top_p=0.8,top_k=20,presence_penalty=1.5 \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
