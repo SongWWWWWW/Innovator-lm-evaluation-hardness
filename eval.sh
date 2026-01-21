@@ -35,3 +35,7 @@ end=$(date +%s.%N)
 # 使用 bc 计算差值
 runtime=$(echo "$end - $start" | bc)
 echo "Total evaluation time: $runtime seconds"
+
+# test ai commit
+# test auto commit
+
