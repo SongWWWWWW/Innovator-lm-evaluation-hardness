@@ -30,14 +30,14 @@ tasks_config=(
     "humaneval:0"
     "leaderboard_gpqa_diamond:5"
     "winogrande:5"
-    "triviaqa:5"
-    "nq_open:3"
-    "arc_challenge:25"
-    "arc_easy:25"
-    "hellaswag:10"
-    "agieval:0"
-    "aime24:0"
-    "aime25:0"
+    # "triviaqa:5"
+    # "nq_open:3"
+    # "arc_challenge:25"
+    # "arc_easy:25"
+    # "hellaswag:10"
+    # "agieval:0"
+    # "aime24:0"
+    # "aime25:0"
 )
 # tasks_config=(
 
