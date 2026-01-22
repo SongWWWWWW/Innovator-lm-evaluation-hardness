@@ -72,27 +72,14 @@ export model_name="stage_2_instruct_Mixed_40M_1111_shuffled_v1_iter_0135000_hf"
 export OPENAI_API_KEY="EMPTY"
 
 start_total=$(date +%s.%N)
-# 
-# 执行单次评测命令
-# 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
-# CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
-#     --model openai-chat-completions\
-#     --model_args model=$model_name,num_concurrent=10,eos_string="<|im_end|>" \
-#     --tasks "$tasks_arg" \
-#     --num_fewshot "$shots_arg" \
-#     --batch_size auto \
-#     --output_path "${output_path}/${model_name}_${current_time}" \
-#     --confirm_run_unsafe_code \
-#     --apply_chat_template \
-#     2>&1 | tee -a $log_file
-# 建议先用这个简化的命令测试 1 个样本
+
+
 python3 -m lm_eval run \
     --model openai-chat-completions \
-    --model_args "model=${model_name},base_url=http://61.175.246.233:8002/v1/chat/completions,num_concurrent=1,max_tokens=4096,max_length=32768,eos_string=<|im_end|>" \
-    --gen_kwargs "temperature=0.95,top_p=0.7," \
-    --tasks "aime24" \
-    --num_fewshot 0 \
-    --limit 1 \
+    --model_args "model=${model_name},base_url=http://61.175.246.233:8002/v1/chat/completions,num_concurrent=1,eos_string=<|im_end|>" \
+    --gen_kwargs "temperature=0.95,top_p=0.7,max_tokens=4096,max_length=32768" \
+    --tasks "$tasks_arg" \
+    --num_fewshot "$shots_arg" \
     --apply_chat_template \
     --confirm_run_unsafe_code \
     2>&1 | tee -a $log_file
