@@ -22,14 +22,14 @@ log_file="${output_path}/eval_${model_name}_${current_time}.log"
 # 配置任务及其对应的 shot 数
 # 格式保持不变，方便后面解析
 tasks_config=(
-    # "mmlu:5"
-    # "cmmlu:5"
-    # "ceval-valid:5"
+    # "mmlu:5" # logprob
+    # "cmmlu:5" # logprob
+    # "ceval-valid:5" # logprob
     # "bbh:3"
-    # "gsm8k_cot:8"
-    # "humaneval:0"
-    # "leaderboard_gpqa_diamond:5"
-    "winogrande:5"
+    "gsm8k_cot:8"
+    "humaneval:0"
+    # "leaderboard_gpqa_diamond:5" # logprob
+    # "winogrande:5" # logprob
     # "triviaqa:5"
     # "nq_open:3"
     # "arc_challenge:25"
