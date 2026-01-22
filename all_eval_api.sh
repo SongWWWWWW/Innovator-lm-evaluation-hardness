@@ -25,19 +25,19 @@ tasks_config=(
     # "mmlu:5" # logprob
     # "cmmlu:5" # logprob
     # "ceval-valid:5" # logprob
-    "bbh:3"
+    # "bbh:3"
     "gsm8k_cot:8"
     "humaneval:0"
     # "leaderboard_gpqa_diamond:5" # logprob
     # "winogrande:5" # logprob
-    # "triviaqa:5"
-    # "nq_open:3"
-    # "arc_challenge:25"
-    # "arc_easy:25"
-    # "hellaswag:10"
-    # "agieval:0"
-    # "aime24:0"
-    # "aime25:0"
+    "triviaqa:5"
+    "nq_open:3"
+    "arc_challenge:25"
+    "arc_easy:25"
+    "hellaswag:10"
+    "agieval:0"
+    "aime24:0"
+    "aime25:0"
 )
 # tasks_config=(
 
