@@ -2,7 +2,7 @@
 source /mnt/innovator/miniconda3/etc/profile.d/conda.sh
 conda activate lm_evaluation
 cd /mnt/innovator/code/wangcong/Evaluation/lm-evaluation-harness
-
+export VLLM_USE_V1_ENGINE=0
 # 环境变量设置
 export HF_ENDPOINT="https://hf-mirror.com"
 export HF_TOKEN=$HF_TOKEN
