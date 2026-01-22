@@ -343,7 +343,12 @@ class Run(SubCommand):
 
         # Create and validate config (most validation now occurs in EvaluationConfig)
         cfg = EvaluatorConfig.from_cli(args)
-        cfg.num_fewshot = [int(i) for i in cfg.num_fewshot]
+        try:
+            cfg.num_fewshot = [int(i) for i in cfg.num_fewshot]
+        except ValueError:
+            for i in cfg.num_fewshot:
+                print(f"-{i}-{type(i)}")
+            raise ValueError("num_fewshot must be a list of integers")
         from lm_eval import simple_evaluate
         from lm_eval.loggers import EvaluationTracker, WandbLogger
         from lm_eval.utils import handle_non_serializable, make_table

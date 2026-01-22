@@ -21,27 +21,28 @@ log_file="${output_path}/eval_${model_name}_${current_time}.log"
 
 # 配置任务及其对应的 shot 数
 # 格式保持不变，方便后面解析
-# tasks_config=(
-#     "mmlu:5"
-#     "cmmlu:5"
-#     "ceval-valid:5"
-#     "bbh:3"
-#     "gsm8k_cot:8"
-#     "humaneval:0"
-#     "leaderboard_gpqa_diamond:5"
-#     "winogrande:5"
-#     "triviaqa:5"
-#     "nq_open:3"
-#     "arc_challenge:25"
-#     "arc_easy:25"
-#     "hellaswag:10"
-#     "agieval:0"
-# )
 tasks_config=(
+    "mmlu:5"
+    "cmmlu:5"
+    "ceval-valid:5"
+    "bbh:3"
+    "gsm8k_cot:8"
+    "humaneval:0"
+    "leaderboard_gpqa_diamond:5"
+    "winogrande:5"
+    "triviaqa:5"
+    "nq_open:3"
+    "arc_challenge:25"
+    "arc_easy:25"
+    "hellaswag:10"
+    "agieval:0"
     "aime24:0"
     "aime25:0"
-    # "hendrycks_math:4"
 )
+# tasks_config=(
+
+#     # "hendrycks_math:4"
+# )
 # --- 关键修改：解析数组并拼接成逗号分隔的字符串 ---
 task_names=()
 shot_nums=()
