@@ -88,7 +88,7 @@ start_total=$(date +%s.%N)
 # 建议先用这个简化的命令测试 1 个样本
 python3 -m lm_eval run \
     --model openai-chat-completions \
-    --model_args model=$model_name,base_url=$OPENAI_BASE_URL,num_concurrent=1,max_gen_toks=1024 \
+    --model_args "model=${model_name},base_url=http://61.175.246.233:8002/v1/chat/completions,num_concurrent=1,max_tokens=4096,max_length=32768,eos_string=<|im_end|>" \
     --tasks "aime24" \
     --num_fewshot 0 \
     --limit 1 \
