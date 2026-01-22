@@ -25,7 +25,7 @@ tasks_config=(
     # "mmlu:5" # logprob
     # "cmmlu:5" # logprob
     # "ceval-valid:5" # logprob
-    # "bbh:3"
+    "bbh:3"
     "gsm8k_cot:8"
     "humaneval:0"
     # "leaderboard_gpqa_diamond:5" # logprob
