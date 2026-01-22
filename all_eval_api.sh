@@ -76,7 +76,7 @@ start_total=$(date +%s.%N)
 # 执行单次评测命令
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
-    --model  vllm\
+    --model openai-chat-completions\
     --model_args model=$model_name,api_key=$api_key \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
