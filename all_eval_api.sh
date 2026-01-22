@@ -77,8 +77,8 @@ start_total=$(date +%s.%N)
 
 python3 -m lm_eval run \
     --model openai-chat-completions \
-    --model_args "model=${model_name},base_url=http://61.175.246.233:8002/v1/chat/completions,num_concurrent=32,eos_string=<|im_end|>" \
-    --gen_kwargs "temperature=0.7,top_p=0.8,top_k=20,presence_penalty=1.5,max_tokens=4096,max_length=32768" \
+    --model_args "model=${model_name},base_url=http://61.175.246.233:8002/v1/chat/completions,num_concurrent=128,eos_string=<|im_end|>" \
+    --gen_kwargs "temperature=0.7,top_p=0.8,top_k=20,presence_penalty=1.5,max_tokens=8192,max_length=32768" \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
     --apply_chat_template \
