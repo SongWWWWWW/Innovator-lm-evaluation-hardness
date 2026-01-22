@@ -32,8 +32,8 @@ tasks_config=(
     # "winogrande:5" # logprob
     # "triviaqa:5"
     "nq_open:3"
-    # "arc_challenge:25"
-    # "arc_easy:25"
+    # "arc_challenge:25" # logprob
+    # "arc_easy:25" # logpro
     # "hellaswag:10"
     # "agieval:0" # logprob
     "aime24:0"
