@@ -30,7 +30,7 @@ tasks_config=(
     "humaneval:0"
     # "leaderboard_gpqa_diamond:5" # logprob
     # "winogrande:5" # logprob
-    "triviaqa:5"
+    # "triviaqa:5"
     "nq_open:3"
     "arc_challenge:25"
     "arc_easy:25"
