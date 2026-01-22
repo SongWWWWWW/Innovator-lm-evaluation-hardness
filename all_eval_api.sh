@@ -89,7 +89,7 @@ start_total=$(date +%s.%N)
 python3 -m lm_eval run \
     --model openai-chat-completions \
     --model_args "model=${model_name},base_url=http://61.175.246.233:8002/v1/chat/completions,num_concurrent=1,max_tokens=4096,max_length=32768,eos_string=<|im_end|>" \
-    --gen_args
+    --gen_kwargs "temperature=0.95,top_p=0.7," \
     --tasks "aime24" \
     --num_fewshot 0 \
     --limit 1 \
