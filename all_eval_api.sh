@@ -69,7 +69,7 @@ echo "==========================================================" >> $log_file
 
 export OPENAI_BASE_URL="http://61.175.246.233:8002/v1"
 export model_name="stage_2_instruct_Mixed_40M_1111_shuffled_v1_iter_0135000_hf"
-export api_key="EMPTY"
+export OPENAI_API_KEY="EMPTY"
 
 start_total=$(date +%s.%N)
 # 
@@ -83,6 +83,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
     --batch_size auto \
     --output_path "${output_path}/${model_name}_${current_time}" \
     --confirm_run_unsafe_code \
+    --apply_chat_template \
     2>&1 | tee -a $log_file
 
 end_total=$(date +%s.%N)
