@@ -67,7 +67,7 @@ echo "任务列表: $tasks_arg" >> $log_file
 echo "对应 Shots: $shots_arg" >> $log_file
 echo "==========================================================" >> $log_file
 
-export OPENAI_BASE_URL="http://61.175.246.233:8002/v1"
+export OPENAI_BASE_URL="http://61.175.246.233:8002/v1/chat/completions"
 export model_name="stage_2_instruct_Mixed_40M_1111_shuffled_v1_iter_0135000_hf"
 export OPENAI_API_KEY="EMPTY"
 
@@ -75,15 +75,25 @@ start_total=$(date +%s.%N)
 # 
 # 执行单次评测命令
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
-    --model openai-chat-completions\
-    --model_args model=$model_name,num_concurrent=10,eos_string="<|im_end|>" \
-    --tasks "$tasks_arg" \
-    --num_fewshot "$shots_arg" \
-    --batch_size auto \
-    --output_path "${output_path}/${model_name}_${current_time}" \
-    --confirm_run_unsafe_code \
+# CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
+#     --model openai-chat-completions\
+#     --model_args model=$model_name,num_concurrent=10,eos_string="<|im_end|>" \
+#     --tasks "$tasks_arg" \
+#     --num_fewshot "$shots_arg" \
+#     --batch_size auto \
+#     --output_path "${output_path}/${model_name}_${current_time}" \
+#     --confirm_run_unsafe_code \
+#     --apply_chat_template \
+#     2>&1 | tee -a $log_file
+# 建议先用这个简化的命令测试 1 个样本
+python3 -m lm_eval run \
+    --model openai-chat-completions \
+    --model_args model=$model_name,base_url=$OPENAI_BASE_URL,num_concurrent=1,max_gen_toks=1024 \
+    --tasks "aime24" \
+    --num_fewshot 0 \
+    --limit 1 \
     --apply_chat_template \
+    --confirm_run_unsafe_code \
     2>&1 | tee -a $log_file
 
 end_total=$(date +%s.%N)
