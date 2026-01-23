@@ -36,8 +36,8 @@ tasks_config=(
     # "arc_easy:25" # logprob
     # "hellaswag:10" # logprob
     # "agieval:0" # logprob
-    # "aime24:0"
-    # "aime25:0"
+    "aime24:0"
+    "aime25:0"
 )
 # tasks_config=(
 

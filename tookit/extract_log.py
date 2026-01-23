@@ -9,6 +9,7 @@ def parse():
     parser.add_argument("--input_log", type=str, default="/mnt/innovator/data/wangcong/data/eval/eval_Qwen3-30B-A3B-Base_20260115_080237.log", help="输入的日志文件路径")
     parser.add_argument("--output_excel", type=str, default="/mnt/innovator/data/wangcong/data/eval/results/general_task.xlsx", help="输出的 Excel 文件名")
     parser.add_argument("--description", type=str, help="description for this run", default="None")
+    parser.add_argument("--mode", type=str, choices=["update", "add"], required=True, help="运行模式：train（训练）、val（验证）、test（测试）")
     args = parser.parse_args()
     
     return args
@@ -73,7 +74,7 @@ def parse_main_metrics(file_path):
 
     return model_name, results
 
-def update_excel(log_path, excel_path):
+def update_excel(log_path, excel_path, mode):
     """
     将解析结果追加到 Excel 中
     """
@@ -98,11 +99,11 @@ def update_excel(log_path, excel_path):
     # 4. 合并数据
     # 如果模型名（列名）已存在，则会覆盖旧列
     # 如果数据集（行名）不存在，则会自动新增一行
-    # if model_name in df_existing.columns:
-    #     print(f"警告：模型 {model_name} 已存在于表中，将更新其数据。")
-    #     df_existing[model_name] = new_series
-    # else:
-    #     df_existing = pd.concat([df_existing, new_series], axis=1)
+    if model_name in df_existing.columns:
+        print(f"警告：模型 {model_name} 已存在于表中，将更新其数据。")
+        df_existing[model_name] = new_series
+    else:
+        df_existing = pd.concat([df_existing, new_series], axis=1)
     df_existing = pd.concat([df_existing, new_series], axis=1)
 
     # 5. 保存结果
