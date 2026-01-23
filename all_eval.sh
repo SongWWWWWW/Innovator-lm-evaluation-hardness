@@ -10,9 +10,10 @@ export HF_DATASETS_CACHE="/mnt/innovator/data/wangcong/.cache"
 export HF_DATASETS_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 export HF_ALLOW_CODE_EVAL="1"
+# export VLLM_USE_V1_ENGINE=0
 
 current_time=$(date "+%Y%m%d_%H%M%S")
-model_path="/mnt/innovator/code/wenzichen/LLaVA-OneVision-1.5/TEST/LLaVA-OneVision-1.5-RL/experiments/checkpoints/root/0109_SFT_Stage1_44M_Mixed_AII_Sci_Data_V2_iter_0157285_sft_780K_hf-STAGE2-RL-GSPO/0109-trial1/default/epoch1epochstep1126globalstep6499"
+model_path="/mnt/innovator/data/wangcong/model/Qwen3-30B-A3B"
 model_name=$(basename $model_path)
 output_path="/mnt/innovator/data/wangcong/data/eval/general"
 mkdir -p $output_path
@@ -56,7 +57,7 @@ tasks_arg=$(IFS=,; echo "${task_names[*]}")
 shots_arg=$(IFS=,; echo "${shot_nums[*]}")
 # ----------------------------------------------
 
-tensor_parallel_size=8
+tensor_parallel_size=4
 data_parallel_size=1
 
 # 初始化日志
@@ -71,10 +72,10 @@ start_total=$(date +%s.%N)
 # 
 # 执行单次评测命令
 # 核心变化：--tasks 传入所有任务，--num_fewshot 传入所有对应 shot
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 -m lm_eval run \
+CUDA_VISIBLE_DEVICES=0,1,2,3 python3 -m lm_eval run \
     --model vllm \
-    --model_args pretrained=$model_path,dtype=auto,trust_remote_code=True \
-    --gen_kwargs temperature=0.7,tensor_parallel_size=$tensor_parallel_size,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size,top_p=0.8,top_k=20,presence_penalty=1.5 \
+    --model_args pretrained=$model_path,dtype=auto,trust_remote_code=True,tensor_parallel_size=$tensor_parallel_size,gpu_memory_utilization=0.9,data_parallel_size=$data_parallel_size \
+    --gen_kwargs temperature=0.7,top_p=0.8,top_k=20,presence_penalty=1.5,max_gen_toks=30000,n=64 \
     --tasks "$tasks_arg" \
     --num_fewshot "$shots_arg" \
     --batch_size auto \
